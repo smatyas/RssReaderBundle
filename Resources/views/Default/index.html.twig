@@ -1,0 +1,108 @@
+{% extends 'MSoRssReaderBundle::base.html.twig' %}
+
+{% block body %}
+	<h1>Hírek</h1>
+
+    <form action="{{ path('MSoRssReaderBundle_homepage') }}" method="post" id="getmore_form">
+        <input type="hidden" name="maxtime" id="maxtime" value="{{ maxtime }}" />
+    </form>
+
+
+    <div class="article" id="article_template">
+        <div class="channel_header">
+            <h2><a href="" target="_blank"></a></h2>
+            <pre class="pubdate"></pre>
+        </div>
+        <div class="content"></div>
+    </div>
+
+    <div id="article_list">
+	{% for article in articles %}
+        <div class="article">
+            <div class="channel_header">
+                {% if article.image.url is defined %}
+                    <img src="{{ article.image.url }}" alt="{{ article.image.title }}" title="{{ article.image.title }}" />
+                {% else %}
+                    <pre class="source_title">{{ article.title }}</pre>
+                {% endif %}
+                <h2><a href="{{ article.item.link }}" target="_blank">{{ article.item.title }}</a></h2>
+                <pre class="pubdate">&nbsp;{{ article.item_date|date("Y. m. d. H:i") }}</pre>
+            </div>
+            <div class="content">
+                {{ article.item.description|raw }}
+            </div>
+        </div>
+	{% endfor %}
+    </div>
+
+    <a href="javascript:void(0);" onclick="getmore();">Korábbi hírek...</a>
+
+    <script type="text/javascript">
+        function getmore()
+        {
+            $.ajax(
+            {
+                url: "{{ path('MSoRssReaderBundle_homepage') }}",
+                type: "POST",
+                data: $("#getmore_form").serialize(),
+                success: function(data)
+                {
+                    try
+                    {
+                        // insert new articles
+                        if (data.articles.length > 0)
+                        {
+                            $('#maxtime').val(data.maxtime);
+
+                            for (var i = 0; i < data.articles.length; i++)
+                            {
+                                var t = data.articles[i];
+
+                                // assemble new element
+                                var nt = $('#article_template').clone();
+                                nt.removeAttr('id'); // also unhides
+
+                                var ni = null;
+                                if (t.image.url != undefined)
+                                {
+                                    // channel image exists
+                                    ni = $('<img src="' + t.image.url + '" alt="' + t.image.title + '" title="' + t.image.url + '" />');
+                                }
+                                else
+                                {
+                                    // no channel image, inserting channel title
+                                    ni = $('<pre class="source_title">' + t.title[0] + '</pre>');
+                                }
+                                $(ni).prependTo($(nt).find('.channel_header').first());
+
+                                $(nt).find('h2 a').first().html(t.item.title);
+                                $(nt).find('h2 a').first().attr('href', t.item.link);
+                                $(nt).find('.pubdate').first().html(t.item_date_formatted);
+                                $(nt).find('.content').first().html(t.item.description);
+
+                                // insert new element
+                                $(nt).appendTo($('#article_list'));
+                                $(nt).fadeIn(1000);
+                            }
+                        }
+
+                        if (data.error != "")
+                        {
+                            alert(data.error);
+                        }
+                    }
+                    catch (err)
+                    {
+                        alert(err.message);
+                    }
+                },
+                error: function(data)
+                {
+                    alert('error');
+                },
+                dataType: "json",
+                timeout: 10000
+            });
+        }
+    </script>
+{% endblock %}

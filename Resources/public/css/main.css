@@ -1,0 +1,63 @@
+body {
+    font-family: Arial;
+}
+
+div.article {
+    border-bottom: 1px dashed #4444dd;
+    background-color: #d3d3d3;
+    margin: 5px 0 10px 0;
+    padding: 2px;
+}
+
+div.channel_header {
+    /*border: 1px solid red;*/
+    margin: 5px;
+}
+
+div.channel_header img {
+    vertical-align: middle;
+}
+
+div.channel_header pre.source_title {
+    font-size: 14pt;
+    font-weight: bold;
+    font-family: Arial;
+    display: inline;
+}
+
+div.channel_header pre.pubdate {
+    font-size: 10pt;
+    font-style: italic;
+    display: inline;
+    float: right;
+    padding-right: 5px;
+}
+
+div.channel_header h2 {
+    font-size: 12pt;
+    padding-left: 5pt;
+    line-height: 20pt;
+    margin: 5pt;
+    display: inline;
+}
+
+div.channel_header a {
+    color: #555;
+    text-decoration: none;
+}
+
+div.channel_header a:hover {
+    color: #111;
+    text-decoration: underline;
+}
+
+div.content {
+    /*border: 1px solid green;*/
+    margin: 5px;
+    padding: 5px;
+    background-color: #ffffff;
+}
+
+#article_template {
+    display: none;
+}

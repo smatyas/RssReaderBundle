@@ -1,0 +1,3 @@
+MSoRssReaderBundle_homepage:
+    pattern:  /
+    defaults: { _controller: MSoRssReaderBundle:Default:index }

@@ -1,0 +1,4 @@
+It's a simple rss reader bundle for Symfony 2.
+Displays an ordered, merged list of rss items from different sources.
+
+More about symfony: http://symfony.com/
